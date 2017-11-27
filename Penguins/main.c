@@ -2,13 +2,17 @@
 //  main.c
 //  Penguins
 //
-//  Created by Richard Szczerba on 26/11/2017.
+//
 //
 
 #include <stdio.h>
+#include "map.h"
+
 
 int main(int argc, const char * argv[]) {
-    // insert code here...
-    printf("Hello, World!\n");
+    //readMap("beforeGameStarts.txt");
+    //readMap("midGame1.txt");
+    //readMap("midGame2.txt");
+    readMap("movement1.txt");
     return 0;
 }
