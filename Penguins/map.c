@@ -7,13 +7,10 @@
 
 #include "map.h"
 
-int MaxRows = 100;
-int MaxColumns = 100;
 int playerTurn, numberOfPlayers, maxNumberOfPenguinsPerPlayer;
-int maxNumberOfPlayers = 6;
 char phase[10];
-int playerPoints[6] = {0};
-char map[100][100];
+int playerPoints[MAXPLAYERS] = {0};
+char map[MAXROWS][MAXCOLUMNS];
 
 char *substring (char *string, int start, int end);
 void readZeroRow(char *rowString);
@@ -67,7 +64,7 @@ void readMap(const char *nameOfFile) {
 void readZeroRow(char *rowString){
     playerTurn = (int)rowString[0]-'0';
     
-    int score[maxNumberOfPlayers+2];
+    int score[MAXPLAYERS+2];
     int length = (int)strlen(rowString);
     int scoreIndex = 0;
     int i;
@@ -79,7 +76,7 @@ void readZeroRow(char *rowString){
         }
     }
     
-    for(i=0; i<maxNumberOfPlayers; i++){
+    for(i=0; i<MAXPLAYERS; i++){
         playerPoints[i] = atoi(substring(rowString, score[i], score[i+1]));
     };
 }
@@ -105,10 +102,10 @@ char *substring (char *string, int start, int end){
     return pointer;
 }
 
-void printMap(char map[MaxRows][MaxColumns]) {
+void printMap(char map[MAXROWS][MAXCOLUMNS]) {
     int i, j;
-    for (i=0; i<MaxRows; i++){
-        for (j=0; j<MaxColumns; j++){
+    for (i=0; i<MAXROWS; i++){
+        for (j=0; j<MAXCOLUMNS; j++){
             if (map[i][j] == '\0'){
                 j = 0;
                 break;
@@ -124,8 +121,8 @@ void printMap(char map[MaxRows][MaxColumns]) {
 
 void printMapToFile(FILE *f) {
     int i, j;
-    for (i=0; i<MaxRows; i++){
-        for (j=0; j<MaxColumns; j++){
+    for (i=0; i<MAXROWS; i++){
+        for (j=0; j<MAXCOLUMNS; j++){
             if (map[i][j] == '\0'){
                 j = 0;
                 break;
@@ -147,8 +144,8 @@ void outputMap(char *fileName) {
         f = fopen(fileName, "wb");
     }
     fprintf(f, "%d ", playerTurn+1);
-    for (i=0; i<maxNumberOfPlayers; i++) {
-        if (i == maxNumberOfPlayers-1){
+    for (i=0; i<MAXPLAYERS; i++) {
+        if (i == MAXPLAYERS-1){
             fprintf(f, "%d\n", playerPoints[i]);
         }
         else {
