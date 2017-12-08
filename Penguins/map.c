@@ -14,6 +14,7 @@ char map[MAXROWS][MAXCOLUMNS];
 
 char *substring (char *string, int start, int end);
 void readZeroRow(char *rowString);
+int isPenguinCharacter(char c);
 
 void readMap(const char *nameOfFile) {
     FILE *file;
@@ -39,15 +40,19 @@ void readMap(const char *nameOfFile) {
                         break;
                     case 3:
                         if (strcmp(s, "placement\n") == 0){ strcpy(phase, "placement"); }
+                        
                         else { strcpy(phase, "movement");}
                         break;
                 }
             }
         }
-        
+        int penguinsOnBoard = 0;
         while ((c = getc(file)) != EOF){
             k += 1;
             if (c == '\n'){
+                if (j % 2 == 0){
+                    map[j][k] = ' ';
+                }
                 j += 1;
                 k = 0;
                 c = getc(file); // skip \n
@@ -55,11 +60,30 @@ void readMap(const char *nameOfFile) {
             if (c == '\0'){
                 printf("Terminate");
             }
+            if (j % 2 == 1 && k == 0) {
+                map[j][k] = ' ';
+                k++;
+            }
             map[j][k] = c;
+            if (isPenguinCharacter(c)){ penguinsOnBoard++; };
+        }
+        if (penguinsOnBoard == (maxNumberOfPenguinsPerPlayer*numberOfPlayers)) {
+            strcpy(phase, "movement");
         }
         fclose(file);
     }
 }
+
+int isPenguinCharacter(char c){
+    int i;
+    for (i = 0; i < numberOfPlayers; i++) {
+        if (c == 'a'+i || c == 'A'+i || c == 'U'+i){
+            return 1;
+        }
+    }
+    
+    return 0;
+};
 
 void readZeroRow(char *rowString){
     playerTurn = (int)rowString[0]-'0';
@@ -103,14 +127,28 @@ char *substring (char *string, int start, int end){
 }
 
 void printMap(char map[MAXROWS][MAXCOLUMNS]) {
-    int i, j;
+    int i = 0, j = 0;
+    while (map[0][j]){
+        if (j == 0) {
+            printf("     %c  ", 'A'+j);
+        }
+        else {
+            printf("  %c  ", 'A'+j);
+        }
+        j++;
+    }
+    printf("\n");
     for (i=0; i<MAXROWS; i++){
+        if (map[i][0]){
+            printf("%d: ",i+1);
+        } else { return; }
+        
         for (j=0; j<MAXCOLUMNS; j++){
             if (map[i][j] == '\0'){
                 j = 0;
                 break;
             }
-            printf("%c", map[i][j]);
+            printf("[ %c ]", map[i][j]);
         }
         if (map[i][j] == '\0'){
             break;
@@ -119,10 +157,31 @@ void printMap(char map[MAXROWS][MAXCOLUMNS]) {
     }
 };
 
-void printMapToFile(FILE *f) {
+void unIndentMap(){
     int i, j;
     for (i=0; i<MAXROWS; i++){
         for (j=0; j<MAXCOLUMNS; j++){
+            if (i % 2 == 1 && j == 0){ j++; };
+            if (map[i][j] == '\0'){
+                if (i % 2 == 0) {
+                    map[i][j-1] = '\0';
+                };
+                j = 0;
+                break;
+            }
+        }
+        if (map[i][j] == '\0'){
+            break;
+        }
+    }
+}
+
+void printMapToFile(FILE *f) {
+    int i, j;
+    unIndentMap();
+    for (i=0; i<MAXROWS; i++){
+        for (j=0; j<MAXCOLUMNS; j++){
+            if (i % 2 == 1 && j == 0){ j++; };
             if (map[i][j] == '\0'){
                 j = 0;
                 break;
@@ -143,13 +202,13 @@ void outputMap(char *fileName) {
         printf("File does not exist. Creating File");
         f = fopen(fileName, "wb");
     }
-    fprintf(f, "%d ", playerTurn+1);
+    fprintf(f, "%d ", ((playerTurn+1) % numberOfPlayers));
     for (i=0; i<MAXPLAYERS; i++) {
         if (i == MAXPLAYERS-1){
             fprintf(f, "%d\n", playerPoints[i]);
         }
         else {
-        fprintf(f, "%d ", playerPoints[i]);
+            fprintf(f, "%d ", playerPoints[i]);
         }
     }
     fprintf(f, "%d\n", numberOfPlayers);
