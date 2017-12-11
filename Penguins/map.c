@@ -16,6 +16,8 @@ char *substring (char *string, int start, int end);
 void readZeroRow(char *rowString);
 int isPenguinCharacter(char c);
 
+//TODO: Adjust what to do based on read input
+
 void readMap(const char *nameOfFile) {
     FILE *file;
     file = fopen(nameOfFile, "r");
@@ -130,17 +132,17 @@ void printMap(char map[MAXROWS][MAXCOLUMNS]) {
     int i = 0, j = 0;
     while (map[0][j]){
         if (j == 0) {
-            printf("     %c  ", 'A'+j);
+            printf("     %d  ", j);
         }
         else {
-            printf("  %c  ", 'A'+j);
+            printf("  %d  ", j);
         }
         j++;
     }
     printf("\n");
     for (i=0; i<MAXROWS; i++){
         if (map[i][0]){
-            printf("%d: ",i+1);
+            printf("%c: ",'A'+i);
         } else { return; }
         
         for (j=0; j<MAXCOLUMNS; j++){
@@ -218,4 +220,33 @@ void outputMap(char *fileName) {
     printMapToFile(f);
     
     fclose(f);
+}
+
+int penguinsOnBoard(char map[MAXROWS][MAXCOLUMNS]){
+    int i, j;
+    int penguins = 0;
+    for (i=0; i<MAXROWS; i++){
+        for (j=0; j<MAXCOLUMNS; j++){
+            if (map[i][j] == '\0'){
+                j=0;
+                break;
+            }
+            int number = convertToInt(map[i][j], '0');
+            if (0 < number && number <= 9) {
+                penguins += convertToInt(map[i][j], '0');
+            }
+        }
+        if (map[i][j] == '\0'){
+            break;
+        }
+    }
+    return penguins;
+}
+
+
+void printScores(){
+    int i;
+    for(i=0; i<numberOfPlayers; i++){
+        printf("Player %d has %d points.\n", i+1, playerPoints[i]);
+    }
 }

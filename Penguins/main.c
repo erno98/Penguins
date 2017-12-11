@@ -5,15 +5,17 @@
 //
 //
 
-#include <stdio.h>
-#include "map.h"
-#include "placement.h"
 
+#include "main.h"
 
 int main(int argc, const char * argv[]) {
-    readMap("movement1.txt");
+    //readMap("beforeGameStarts.txt");
+    readMap("movement2.txt");
     printMap(map);
+    //placement();
+    initMovement();
+    printf("Player %d wins with %d points.\n", who_win(playerPoints)+1, playerPoints[who_win(playerPoints)]);
+    printScores();
     outputMap("output.txt");
-    placement();
     return 0;
 }

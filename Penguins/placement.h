@@ -8,9 +8,12 @@
 #ifndef placement_h
 #define placement_h
 
-#include <stdio.h>
-#include "map.h"
+#include "main.h"
 
 #endif /* placement_h */
 
-int placement();
+typedef char string[3];
+
+int placement(void);
+
+int convertToInt(char character, int startingPoint);

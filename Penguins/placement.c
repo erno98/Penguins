@@ -5,40 +5,49 @@
 //
 //
 
-#include "map.h"
-#include "placement.h"
-#include <string.h>
 
+#include "placement.h"
+
+void placePenguin(int playerID, string position);
+int convertToInt(char character, int startingPoint);
 
 int placement(){
-    //printf("String %s", string);
-    printf("\n");
-    printMap(map);
-    
-    *string position;
-    int i,j;
-    int playerID=1;
-    for(i=0; i < numberOfPlayers; i++){
-        for(j=0; j < maxNumberOfPenguinsPerPlayer; j++){
-               printf("Player : %c\n", playerID);
-               scanf("%s", &position);
-               placePenguin(playerID, position);
-               playerID++;
-        }playerID=1;
+    string position = "";
+    int i, playerID;
+    for(i=0; i < maxNumberOfPenguinsPerPlayer; i++){
+        for(playerID=1; playerID <= numberOfPlayers; playerID++){
+            printf("Player : %d\n", playerID);
+            printf("Enter location: ");
+            scanf("%s", position);
+            placePenguin(playerID, position);
+            printMap(map);
+        }
     }
-    
-    
+    printf("All penguins placed; \n");
     
     return 0;
 }
 
-void placePenguin(int playerID, *string position){
-    int X=atoi(position[0]);
-    int Y=atoi(position[1]);
-    if(map[X][Y][2]==' ') printf("Choose block with 1 fish! \n");
-    else{
-        
-        map[X][Y][1]=(playerID+96); //ASCII 97='a' for player 1, 98='b' for player 2 etc.    
+void placePenguin(int playerID, string position){
+    //TODO: check that penguins is not already placed in position
+    int X = convertToInt(position[0], 'A');
+    int Y = convertToInt(position[1], '0');
+    int fishes = convertToInt(map[X][Y], '0');
+    if (fishes != 1) {
+        printf("Choose block with 1 fish! \n");
+    }
+    else {
+        map[X][Y]=(playerID+96); //ASCII 97='a' for player 1, 98='b' for player 2 etc.
     }
     
 }
+
+int convertToInt(char character, int startingPoint){
+    if (character >= 'A'){
+        return (toupper(character) - startingPoint);
+    }
+    else {
+        return (character - startingPoint);
+    }
+    return 0;
+};
