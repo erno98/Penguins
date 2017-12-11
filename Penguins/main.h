@@ -2,7 +2,7 @@
 //  main.h
 //  Penguins
 //
-//  Created by Richard Szczerba on 10/12/2017.
+// 
 //
 
 #ifndef main_h

@@ -2,7 +2,7 @@
 //  movement.h
 //  Penguins
 //
-//  Created by Richard Szczerba on 10/12/2017.
+//  created by Ernest Pokropek 10/12/2017
 //
 
 #ifndef movement_h

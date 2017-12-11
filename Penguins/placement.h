@@ -1,7 +1,7 @@
 //
 //  placement.h
 //  Penguins
-//
+//  created by Ernest Pokropek 10/12/2017
 //
 //
 
