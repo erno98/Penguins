@@ -10,6 +10,7 @@
 
 bool movementPossible(string position, string destination);
 bool pathCorrect(string position, string destination);
+int getFishesFromCharacter(char character);
 
 int initMovement() {
     string position, destination;
@@ -32,18 +33,6 @@ int initMovement() {
     return 0;
 }
 
-int getFishesFromCharacter(char character){
-    if ('a' <= character && character <= 'a'+MAXPLAYERS){
-        return 1;
-    }
-    if ('A' <= character && character <= 'A'+MAXPLAYERS){
-        return 2;
-    }
-    if ('U' <= character && character <= 'U'+MAXPLAYERS){
-        return 3;
-    }
-    return 0;
-}
 
 int movement(string position, string destination, int playerID){
     //TODO: check that player moves their own penguin
@@ -86,6 +75,7 @@ int movement(string position, string destination, int playerID){
 
 bool movementPossible(string position, string destination) {
     //map[x][y]
+    //Is this needed?
     
     int Xp=convertToInt(position[0], 'A');
     int Yp=convertToInt(position[1], '0');
@@ -150,4 +140,17 @@ bool pathCorrect(string position, string destination){
         }
     }
     return false;
+}
+
+int getFishesFromCharacter(char character){
+    if ('a' <= character && character <= 'a'+MAXPLAYERS){
+        return 1;
+    }
+    if ('A' <= character && character <= 'A'+MAXPLAYERS){
+        return 2;
+    }
+    if ('U' <= character && character <= 'U'+MAXPLAYERS){
+        return 3;
+    }
+    return 0;
 }

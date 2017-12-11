@@ -12,7 +12,9 @@ int main(int argc, const char * argv[]) {
     //readMap("beforeGameStarts.txt");
     readMap("movement2.txt");
     printMap(map);
-    //placement();
+    if (phase[0] == 'p') { // placement
+        placement();
+    }
     initMovement();
     printf("Player %d wins with %d points.\n", who_win(playerPoints)+1, playerPoints[who_win(playerPoints)]);
     printScores();
