@@ -12,17 +12,15 @@
 
 #endif /* map_h */
 
-#define MAXROWS 100
-#define MAXCOLUMNS 100
 #define MAXPLAYERS 6
 
 extern int playerTurn, numberOfPlayers, maxNumberOfPenguinsPerPlayer;
 extern int playerPoints[MAXPLAYERS];
 extern char phase[10];
-extern char map[MAXROWS][MAXCOLUMNS];
+extern char **map;
 
 extern void readMap(const char *nameOfFile);
-extern void printMap(char map[MAXROWS][MAXCOLUMNS]);
-extern int penguinsOnBoard(char map[MAXROWS][MAXCOLUMNS]);
+extern void printMap(char **map);
+extern int penguinsOnBoard(char **map);
 extern void outputMap(char *fileName);
 extern void printScores(void);

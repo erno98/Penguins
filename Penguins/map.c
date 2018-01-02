@@ -10,7 +10,9 @@
 int playerTurn, numberOfPlayers, maxNumberOfPenguinsPerPlayer;
 char phase[10];
 int playerPoints[MAXPLAYERS] = {0};
-char map[MAXROWS][MAXCOLUMNS];
+char **map;
+int mapRows = 1;
+int mapColumns = 1;
 
 char *substring (char *string, int start, int end);
 void readZeroRow(char *rowString);
@@ -25,7 +27,7 @@ void readMap(const char *nameOfFile) {
         perror("Error");
     }
     if (file) {
-        int c, i, j = 0, k = -1;
+        int c, i, k = -1;
         char s[100];
         
         for (i=0; i<4; i++){
@@ -50,25 +52,40 @@ void readMap(const char *nameOfFile) {
         }
         int penguinsOnBoard = 0;
         while ((c = getc(file)) != EOF){
-            k += 1;
+            k++;
             if (c == '\n'){
-                if (j % 2 == 0){
-                    map[j][k] = ' ';
+                if(mapRows == 1){
+                    mapColumns = k + 1;
                 }
-                j += 1;
-                k = 0;
+                mapRows++;
+                map = (char **) realloc(map, (sizeof(char *) * mapRows)); // realloc next row;
+                k=0;
                 c = getc(file); // skip \n
             }
-            if (c == '\0'){
-                printf("Terminate");
+            int currentRow = mapRows-1;
+            
+            if (currentRow == 0 && mapColumns == 1 && k == 0) {
+                map = (char **) malloc(sizeof(char *) * mapRows); // malloc first row;
+                map[currentRow] = (char *)malloc(sizeof(char) * (k+1)); //malloc first value;
             }
-            if (j % 2 == 1 && k == 0) {
-                map[j][k] = ' ';
+            else if (currentRow == 0) {
+                map[currentRow] = (char *)realloc(map[currentRow], (sizeof(char) * k+1)); //realloc kth value;
+                mapColumns = k+1;
+                
+            } else if (currentRow > 0 && k == 0){
+                map[currentRow] = (char *)calloc(sizeof(char), mapColumns); //malloc places for all columns;
+            }
+            
+            if (currentRow % 2 == 1 && k == 0) {
+                
+                map[currentRow][k] = ' ';
                 k++;
             }
-            map[j][k] = c;
+            map[currentRow][k] = c;
+            
             if (isPenguinCharacter(c)){ penguinsOnBoard++; };
         }
+        
         if (penguinsOnBoard == (maxNumberOfPenguinsPerPlayer*numberOfPlayers)) {
             strcpy(phase, "movement");
         }
@@ -128,70 +145,36 @@ char *substring (char *string, int start, int end){
     return pointer;
 }
 
-void printMap(char map[MAXROWS][MAXCOLUMNS]) {
+void printMap(char **map) {
     int i = 0, j = 0;
-    while (map[0][j]){
-        if (j == 0) {
-            printf("     %d  ", j);
+    for (i=0; i<mapColumns; i++){
+        if (i == 0) {
+            printf("     %d  ", i);
         }
         else {
-            printf("  %d  ", j);
+            printf("  %d  ", i);
         }
-        j++;
     }
     printf("\n");
-    for (i=0; i<MAXROWS; i++){
+    for (i=0; i<mapRows; i++){
         if (map[i][0]){
             printf("%c: ",'A'+i);
         } else { return; }
         
-        for (j=0; j<MAXCOLUMNS; j++){
-            if (map[i][j] == '\0'){
-                j = 0;
-                break;
-            }
+        for (j=0; j<mapColumns; j++){
             printf("[ %c ]", map[i][j]);
-        }
-        if (map[i][j] == '\0'){
-            break;
         }
         printf("\n");
     }
+    
 };
-
-void unIndentMap(){
-    int i, j;
-    for (i=0; i<MAXROWS; i++){
-        for (j=0; j<MAXCOLUMNS; j++){
-            if (i % 2 == 1 && j == 0){ j++; };
-            if (map[i][j] == '\0'){
-                if (i % 2 == 0) {
-                    map[i][j-1] = '\0';
-                };
-                j = 0;
-                break;
-            }
-        }
-        if (map[i][j] == '\0'){
-            break;
-        }
-    }
-}
 
 void printMapToFile(FILE *f) {
     int i, j;
-    unIndentMap();
-    for (i=0; i<MAXROWS; i++){
-        for (j=0; j<MAXCOLUMNS; j++){
+    for (i=0; i<mapRows; i++){
+        for (j=0; j<mapColumns; j++){
             if (i % 2 == 1 && j == 0){ j++; };
-            if (map[i][j] == '\0'){
-                j = 0;
-                break;
-            }
             fprintf(f, "%c", map[i][j]);
-        }
-        if (map[i][j] == '\0'){
-            break;
         }
         fprintf(f, "\n");
     }
@@ -222,22 +205,15 @@ void outputMap(char *fileName) {
     fclose(f);
 }
 
-int penguinsOnBoard(char map[MAXROWS][MAXCOLUMNS]){
+int penguinsOnBoard(char **map){
     int i, j;
     int penguins = 0;
-    for (i=0; i<MAXROWS; i++){
-        for (j=0; j<MAXCOLUMNS; j++){
-            if (map[i][j] == '\0'){
-                j=0;
-                break;
-            }
+    for (i=0; i<mapRows; i++){
+        for (j=0; j<mapColumns; j++){
             int number = convertToInt(map[i][j], '0');
             if (0 < number && number <= 9) {
                 penguins += convertToInt(map[i][j], '0');
             }
-        }
-        if (map[i][j] == '\0'){
-            break;
         }
     }
     return penguins;
