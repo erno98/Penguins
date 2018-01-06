@@ -142,6 +142,29 @@ bool pathCorrect(string position, string destination){
     return false;
 }
 
+
+bool penguinTeamCorrect(char playerID, char playerTurn){             //checking cases when ID can be a, A, or X (1,2,3 fishes)
+  if(playerID==playerTurn                            
+     || playerID-1+'A'==playerTurn                 // BORYS please make a variable 'playerTurn' in the turn system,
+     || playerID-1+'U'==playerTurn){               // so this function can quickly check whether the player moves
+   return true;                                    // correct penguin.
+  } else return false;
+}
+
+bool destinationInsideMap(string destination){
+ if(destination[0]>mapRows || destination[0]<0 || destination[0]>mapColumns || destination[0]<0){
+   return false;
+ }
+ else return true;
+}
+
+
+bool destinationEmpty(string destination{                      //checking if there's no another penguin
+ string block = map[destination[0]][destination[1]];
+ if(block[1]=='1' || block[1]=='2' || block[1]=='3') return true;    
+ else return true;
+}
+
 int getFishesFromCharacter(char character){
     if ('a' <= character && character <= 'a'+MAXPLAYERS){
         return 1;
