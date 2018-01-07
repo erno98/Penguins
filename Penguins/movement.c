@@ -12,6 +12,11 @@ bool movementPossible(string position, string destination);
 bool pathCorrect(string position, string destination);
 int getFishesFromCharacter(char character);
 
+bool teamCorrect(string playerTurn, string playerID);
+bool destinationInsideMap(string destiantion);
+bool isPenguinAtDestination(string destination);
+
+
 int initMovement() {
     string position, destination;
     int playerID = 0;
@@ -35,10 +40,7 @@ int initMovement() {
 
 
 int movement(string position, string destination, int playerID){
-    //TODO: check that player moves their own penguin
-    // check that it is nout outside of board
-    // check that penguin exists at position
-    
+
     int Xp=convertToInt(position[0], 'A');
     int Yp=convertToInt(position[1], '0');
     int Xd=convertToInt(destination[0], 'A');
@@ -153,4 +155,23 @@ int getFishesFromCharacter(char character){
         return 3;
     }
     return 0;
+}
+
+bool teamCorrect(string playerTurn, string playerID){
+   if(playerID==playerTurn) return true;                        //Borys told that he'll make a function in turn system returning
+   else return false;                                           // the ID of a player currently having turn
+}
+
+bool destinationInsideMap(string destiantion){
+ 
+ if(destination[0]<mapRows && destination[1]<mapColumns &&               //assume that mapRows and mapColumns are previously defined
+    destination[0] >= 0 && destination[1] >= 0) return true;
+ else return false;
+}
+
+bool isPenguinAtDestination(string destination){                                  //checks whether the destination has already 
+   string destinationInfo = map[destination[0]][destination[1]];                  //ID of penguin team on it, or is it empty
+   if (destinationInfo[1]!='1' || destinationInfo[1]!='2' || destinationInfo[1]!='3'){
+    return false }
+ else return true; 
 }
