@@ -11,8 +11,6 @@ int playerTurn, numberOfPlayers, maxNumberOfPenguinsPerPlayer;
 char phase[10];
 int playerPoints[MAXPLAYERS] = {0};
 char **map;
-int mapRows = 1;
-int mapColumns = 1;
 
 char *substring (char *string, int start, int end);
 void readZeroRow(char *rowString);
@@ -21,6 +19,7 @@ int isPenguinCharacter(char c);
 //TODO: Adjust what to do based on read input
 
 void readMap(const char *nameOfFile) {
+    
     FILE *file;
     file = fopen(nameOfFile, "r");
     if (file == NULL) {
@@ -28,6 +27,8 @@ void readMap(const char *nameOfFile) {
     }
     if (file) {
         int c, i, k = -1;
+        mapRows = 1;
+        mapColumns = 1;
         char s[100];
         
         for (i=0; i<4; i++){

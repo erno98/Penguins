@@ -76,8 +76,6 @@ int movement(string position, string destination, int playerID){
 }
 
 bool movementPossible(string position, string destination) {
-    //map[x][y]
-    //Is this needed?
     
     int Xp=convertToInt(position[0], 'A');
     int Yp=convertToInt(position[1], '0');
@@ -162,16 +160,18 @@ bool teamCorrect(string playerTurn, string playerID){
    else return false;                                           // the ID of a player currently having turn
 }
 
-bool destinationInsideMap(string destiantion){
+bool destinationInsideMap(string destination){
  
- if(destination[0]<mapRows && destination[1]<mapColumns &&               //assume that mapRows and mapColumns are previously defined
+ if(destination[0]<mapRows && destination[1]<mapColumns &&
     destination[0] >= 0 && destination[1] >= 0) return true;
  else return false;
 }
 
-bool isPenguinAtDestination(string destination){                                  //checks whether the destination has already 
+bool isPenguinAtDestination(string destination){                                  //checks whether the destination has already
    string destinationInfo = map[destination[0]][destination[1]];                  //ID of penguin team on it, or is it empty
    if (destinationInfo[1]!='1' || destinationInfo[1]!='2' || destinationInfo[1]!='3'){
-    return false }
+       return false ;
+       
+   }
  else return true; 
 }
