@@ -18,6 +18,8 @@ extern int playerTurn, numberOfPlayers, maxNumberOfPenguinsPerPlayer;
 extern int playerPoints[MAXPLAYERS];
 extern char phase[10];
 extern char **map;
+extern int mapRows;
+extern int mapColumns;
 
 extern void readMap(const char *nameOfFile);
 extern void printMap(char **map);
